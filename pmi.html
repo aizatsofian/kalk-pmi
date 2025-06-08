@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Anggaran PMI</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label { font-weight: bold; display: block; margin-top: 15px; }
+    select, button { width: 100%; padding: 8px; margin-top: 5px; }
+    .result { margin-top: 20px; font-size: 1.2em; color: blue; }
+  </style>
+</head>
+<body>
+  <h1>Kalkulator Anggaran Post-Mortem Interval (PMI)</h1>
+
+  <label for="rigor">Rigor Mortis</label>
+  <select id="rigor">
+    <option value="">-- Pilih tahap kekakuan --</option>
+    <option value="none">Tiada</option>
+    <option value="partial">Separuh</option>
+    <option value="full">Lengkap</option>
+    <option value="gone">Hilang</option>
+  </select>
+
+  <label for="insect">Tahap Serangga</label>
+  <select id="insect">
+    <option value="">-- Pilih tahap larva --</option>
+    <option value="none">Tiada</option>
+    <option value="eggs">Telur</option>
+    <option value="larva_early">Larva Awal</option>
+    <option value="larva_mature">Larva Matang</option>
+    <option value="pupa">Kepompong</option>
+  </select>
+
+  <label for="decomposition">Tanda Reput</label>
+  <select id="decomposition">
+    <option value="">-- Pilih tahap reput --</option>
+    <option value="none">Tiada</option>
+    <option value="mild">Awal (bau/lembut)</option>
+    <option value="advanced">Tisu longgar/cecair reput</option>
+  </select>
+
+  <label for="temperature">Suhu Persekitaran</label>
+  <select id="temperature">
+    <option value="">-- Pilih suhu --</option>
+    <option value="cold">Sejuk</option>
+    <option value="normal">Sederhana</option>
+    <option value="hot">Panas</option>
+  </select>
+
+  <label for="location">Lokasi Mayat Dijumpai</label>
+  <select id="location">
+    <option value="">-- Pilih lokasi --</option>
+    <option value="indoor">Dalam bangunan</option>
+    <option value="outdoor">Luar bangunan</option>
+  </select>
+
+  <button onclick="estimatePMI()">Anggar PMI</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function estimatePMI() {
+      const rigor = document.getElementById('rigor').value;
+      const insect = document.getElementById('insect').value;
+      const decomposition = document.getElementById('decomposition').value;
+      const temperature = document.getElementById('temperature').value;
+      const location = document.getElementById('location').value;
+
+      let result = "Data tidak mencukupi";
+
+      if (insect === "pupa") result = "> 3 hari";
+      else if (insect === "larva_mature") result = "24–72 jam";
+      else if (insect === "larva_early") result = "12–24 jam";
+      else if (rigor === "gone") result = "> 24 jam";
+      else if (rigor === "full") result = "6–12 jam";
+      else if (rigor === "partial") result = "2–6 jam";
+      else if (rigor === "none") result = "< 2 jam";
+      else if (decomposition === "advanced") result = "> 72 jam";
+
+      // Laraskan anggaran berdasarkan suhu dan lokasi
+      if (temperature === "hot" && result.includes("jam")) {
+        result += " (dipercepatkan oleh suhu panas)";
+      } else if (temperature === "cold" && result.includes("jam")) {
+        result += " (diperlahankan oleh suhu sejuk)";
+      }
+
+      if (location === "outdoor") {
+        result += ", mungkin berlaku lebih cepat kerana pendedahan cuaca";
+      }
+
+      document.getElementById("result").textContent = "Anggaran PMI: " + result;
+    }
+  </script>
+</body>
+</html>
